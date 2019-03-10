@@ -9,9 +9,6 @@ class Game {
   private boolean running = true;
   
   // constants
-  public final color bgColor = color(100, 100, 100);
-  public final color birdColor = color(255);
-  public final color pipeColor = color(255);
   public final float gravity = 0.2;
   
   // entities
@@ -22,11 +19,17 @@ class Game {
   public Game() {
     bird = new Bird(-6, 20);
     pipes = new ArrayList(8);
-    pipes.add(new Pipe(pos));
   }
   
-  public void mouseClick() {
-    bird.flap();
+  private void restart() {
+    bird.reset();
+    pipes.clear();
+    running = true;
+  }
+  
+  public void handleKeyPressed() {
+    if (key == ' ') bird.flap();
+    if (!running && key == 'r') restart();
   }
   
   public void update() {
@@ -39,6 +42,7 @@ class Game {
   }
   
   public void updatePipes() {
+    if (pipes.size() == 0) pipes.add(new Pipe(pos));
     while (pipes.size() < 8) pipes.add(new Pipe(pipes.get(pipes.size() - 1).pos));
     Iterator<Pipe> i = pipes.iterator();
     while (i.hasNext()) {
@@ -53,12 +57,12 @@ class Game {
   
   public void show() {
     background(bgColor);
-    bird.show();
     for (Pipe pipe : pipes) {
        if (pipe.pos <= pos + width) {
           pipe.show();
-        } else break;
+       } else break;
     }
+    bird.show();
   }
   
 }

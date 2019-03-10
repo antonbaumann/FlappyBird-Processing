@@ -1,19 +1,23 @@
 class Bird {
-  float size;
-  float pos = height * 0.33;
-  float posX = width * 0.22;
+  final float initialPos = height * 0.33;
+  final float posX = width * 0.22;
+  float pos = initialPos;
   float vel = 0;
   float velClick;
+  float size;
+  boolean alive = true;
+  color col;
   
   Bird(float velClick, float size) {
     this.velClick = velClick;
     this.size = size;
+    this.col = birdColor;
   }
   
   void update() {
     behaviour();
     if (collision()) {
-      game.gameOver();
+      die();
     }
   }
   
@@ -24,8 +28,13 @@ class Bird {
   
   boolean collision() {
     float r = size / 2;
-    // with wall
-    if (this.pos - r < 0 || this.pos + r > height) {
+    
+    // collision with ceiling
+    if (this.pos - r < 0) return true;
+    
+    // collision with ground
+    if (this.pos + r > height) {
+      handleCollisionWithGround();
       return true;
     }
       
@@ -42,13 +51,30 @@ class Bird {
     return false;
   }
   
+  void handleCollisionWithGround() {
+    vel = 0.0;
+    game.gameOver();
+  }
+  
   void flap() {
-    vel = velClick;
+    if (alive) vel = velClick;
+  }
+  
+  void die() {
+    col = birdColorDead;
+    alive = false;
+  }
+  
+  void reset() {
+    alive = true;
+    col = birdColor;
+    pos = initialPos;
+    vel = 0;
   }
   
   void show() {
     noStroke();
-    fill(255);
+    fill(col);
     ellipse(posX, pos, size, size);
   }
 }

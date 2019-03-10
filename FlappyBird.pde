@@ -11,10 +11,6 @@ void draw() {
   game.show();
 }
 
-void mouseClicked() {
-  game.mouseClick();
-}
-
 void keyPressed() {
-  if (key == ' ') game.mouseClick();
+  game.handleKeyPressed();
 }

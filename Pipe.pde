@@ -26,7 +26,7 @@ class Pipe {
   
   void show() {
     rectMode(CORNER);
-    fill(game.pipeColor);
+    fill(pipeColor);
     float relPos = getRelativePosition();
     float halfGapSize = gapSize / 2;
     rect(relPos, 0, w, gapPos - halfGapSize);
