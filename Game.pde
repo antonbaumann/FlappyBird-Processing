@@ -4,7 +4,7 @@ class Game {
   
   // game
   private float pos = 0;
-  private float vel = 2;
+  private float vel = 3;
   private float acc = 0.0002;
   private boolean running = true;
   
@@ -15,16 +15,20 @@ class Game {
   private Bird bird;
   private ArrayList<Pipe> pipes;
   
+  private Score score;
+  
   
   public Game() {
     bird = new Bird(-6, 20);
     pipes = new ArrayList(8);
+    score = new Score(new PVector(width - 50, 60));
   }
   
   private void restart() {
     bird.reset();
     pipes.clear();
     running = true;
+    score.reset();
   }
   
   public void handleKeyPressed() {
@@ -47,7 +51,10 @@ class Game {
     Iterator<Pipe> i = pipes.iterator();
     while (i.hasNext()) {
      Pipe pipe = i.next();
-     if (pipe.pos + pipe.w < pos) i.remove();
+     if (pipe.pos + pipe.w < pos) {
+       i.remove();
+       score.update(1);
+     }
     }
   }
   
@@ -62,6 +69,7 @@ class Game {
           pipe.show();
        } else break;
     }
+    score.show();
     bird.show();
   }
   
